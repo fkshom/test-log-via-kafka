@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+  # https://github.com/confluentinc/kafka-images/tree/master/zookeeper
+  zookeeper1:
+    image: confluentinc/cp-zookeeper:6.0.1
+    env_file:
+      - ./zookeeper.env
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 12181
+      ZOOKEEPER_SERVERS: localhost:12888:13888
+      # ZOOKEEPER_ADMIN_SERVER_PORT: 8888
+    network_mode: host
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+      - ./volumes/zookeeper1_data:/var/lib/zookeeper/data
+      - ./volumes/zookeeper1_log:/var/lib/zookeeper/log
+
+  kafka1:
+    image: confluentinc/cp-kafka:6.0.1
+    env_file: 
+      - ./kafka.env
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: localhost:12181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19092
+    network_mode: host
+    depends_on:
+      - zookeeper1
+    volumes:
+      - ./secrets:/etc/kafka/secrets
+      - ./volumes/kafka1:/var/lib/kafka
