@@ -1,0 +1,15 @@
+version: '2.1'
+services:
+  fluentd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#   image: v1.12.0-1.0
+    environment:
+      APP_ENV: 1
+    network_mode: host
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./log:/var/log
+      - ./config:/etc/fluentd
