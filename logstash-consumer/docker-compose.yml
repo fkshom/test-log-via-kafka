@@ -1,0 +1,14 @@
+version: '2.1'
+services:
+  logstash:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: docker.elastic.co/logstash/logstash:7.10.2
+    environment:
+      APP_ENV: 1
+    network_mode: host
+    volumes:
+      - ./config/:/usr/share/logstash/config/
+      - ./pipeline/:/usr/share/logstash/pipeline/
+      - /tmp/:/tmp/  # want to use on memory store
